@@ -4,11 +4,15 @@
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+            <a href="{{route('products.create')}}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                Agregar Producto</a>
+    
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <!-- component -->
+ 
                 <link rel="stylesheet"
                     href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/riva-dashboard-tailwind/riva-dashboard.css">
                 <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet"/>
@@ -18,7 +22,6 @@
                             class="relative flex-[1_auto] flex flex-col break-words min-w-0 bg-clip-border rounded-[.95rem] bg-white m-5">
                             <div
                                 class="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
-                             
                                 <!-- card body  -->
                                 <div class="flex-auto block py-8 pt-6 px-9">
                                     <div class="overflow-x-auto">
@@ -48,7 +51,7 @@
                                                     <td class="p-3 pr-0 text-start">
                                                         <div
                                                             class="relative inline-block shrink-0 rounded-2xl me-3">
-                                                            <img src="{{$producto->imagen}}"
+                                                            <img src="{{ asset($producto->imagen) }}"
                                                                 class="w-[50px] h-[50px] inline-block shrink-0 rounded-2xl"
                                                                 alt="">
                                                         </div>

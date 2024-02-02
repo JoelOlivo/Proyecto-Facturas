@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Producto;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductoStoreRequest;
 use Illuminate\Http\Request;
 
 class ProductoController extends Controller
@@ -22,15 +23,24 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        //
+        return view('productos.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductoStoreRequest $request)
     {
-        //
+        $data = $request->all();
+        
+        if ($request->has('imagen')) {
+            $imagen = $request->file('imagen')->store('medias');
+            $data['imagen'] = $imagen;
+        }
+
+        Producto::create($data);
+
+        return redirect()->route('products.index')->with(['status' => 'Success', 'message' => 'Producto creado correctamente']);
     }
 
     /**
