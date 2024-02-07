@@ -88,8 +88,15 @@ class ProductoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy(Producto $product)
     {
-        //
+        try {
+            $product->delete();
+            $resultado = ['status' => 'success', 'color' => 'green', 'message' => 'Producto eliminado correctamente'];
+        } catch (\Exception $e) {
+            $resultado = ['status' => 'error', 'color' => 'red', 'message' => 'No se puede eliminar el producto' . $e ];
+        }
+
+        return redirect()->route('products.index')->with($resultado);
     }
 }

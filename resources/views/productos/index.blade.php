@@ -89,16 +89,17 @@
                                                     <td class="p-3 pr-0 text-center">
                                                         <a href="#" class="text-gray-500 hover:text-gray-100 mr-2">
                                                             <i class="material-icons-outlined text-base">visibility</i>
-                                                          </a>
-                                                          <a href="{{ route('products.edit', ['product' => $producto->id]) }}" class="text-yellow-400 hover:text-gray-100 mx-2">
-                                                            <i class="material-icons-outlined text-base">edit</i>
-                                                          </a>
-                                                          <a
-                                                            href="#"
-                                                            class="text-red-400 hover:text-gray-100 ml-2"
-                                                          >
-                                                            <i class="material-icons-round text-base">delete_outline</i>
-                                                          </a>
+                                                        </a>
+                                                        <a href="{{ route('products.edit', ['product' => $producto->id]) }}" class="text-yellow-400 hover:text-gray-100 mx-2">
+                                                        <i class="material-icons-outlined text-base">edit</i>
+                                                        </a>
+                                                        <form method="POST" action="{{ route('products.destroy', ['product' => $producto->id]) }}">
+                                                            @csrf
+                                                            {{method_field("DELETE")}}
+                                                            <button type="submit" @click.prevent="$root.submit();">
+                                                                <i class="material-icons-round text-base">delete_outline</i>
+                                                            </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                                 @endforeach
