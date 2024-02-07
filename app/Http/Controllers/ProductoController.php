@@ -6,6 +6,7 @@ use App\Models\Producto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductoStoreRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -23,7 +24,8 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view('productos.create');
+        $product = new Producto;
+        return view('productos.create', compact('product'));
     }
 
     /**
@@ -40,7 +42,7 @@ class ProductoController extends Controller
 
         Producto::create($data);
 
-        return redirect()->route('products.index')->with(['status' => 'Success', 'message' => 'Producto creado correctamente']);
+        return redirect()->route('products.index')->with(['status' => 'Success', 'color' => 'green', 'message' => 'Producto creado correctamente']);
     }
 
     /**
@@ -54,17 +56,33 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto)
+    public function edit(Producto $product)
     {
-        //
+        return view('productos.create', compact('product'));
     }
+
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, Producto $product)
     {
-        //
+        $data = $request->all();
+
+        if ($request->has('imagen')) {
+
+            if ($product->imagen) {
+                Storage::delete($product->imagen);
+            }
+            $imagen = $request->file('imagen')->store('medias');
+            $data['imagen'] = $imagen;
+        }
+
+        $product->fill($data);
+        $product->save();
+
+        return redirect()->route('products.index')->with(['status' => 'Success', 'color' => 'blue', 'message' => 'Producto modificado correctamente']);
     }
 
     /**
