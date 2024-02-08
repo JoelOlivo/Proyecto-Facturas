@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClienteStoreRequest;
 use Illuminate\Http\Request;
 
 class ClienteController extends Controller
@@ -13,7 +14,8 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        //
+        $clientes =Cliente::paginate(10);
+        return view('clientes.index', compact('clientes'));
     }
 
     /**
@@ -21,15 +23,19 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        //
+        $cliente = new Cliente();
+        return view('clientes.create', compact('cliente'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ClienteStoreRequest $request)
     {
-        //
+        $data = $request->all();
+        
+        Cliente::create($data);
+        return redirect()->route('clientes.index')->with(['status' => 'success', 'color' => 'green', 'message' => 'Cliente creado correctamente']);
     }
 
     /**
@@ -45,7 +51,7 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
-        //
+        return view('clientes.create', compact('cliente'));
     }
 
     /**
@@ -53,7 +59,12 @@ class ClienteController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-        //
+        $data = $request->all();
+        
+        $cliente->fill($data);
+        $cliente->save();
+
+        return redirect()->route('clientes.index')->with(['status' => 'success', 'color' => 'green', 'message' => 'Cliente actualizado con éxito']);
     }
 
     /**
@@ -61,6 +72,13 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        //
+        try {
+            $cliente->delete();
+            $with = ['status' => 'success', 'color' => 'red', 'message' => 'Cliente eliminado correctamente'];  
+        } catch (\Exception $e) {
+            $with = ['status' => 'success', 'color' => 'red', 'message' => 'No se puede eliminar el cliente' . $e];
+        }
+
+        return redirect()->route('clientes.index')->with($with);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,5 +35,13 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::resource('/products', ProductoController::class);
+    });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::resource('/clientes', ClienteController::class);
     });
 
