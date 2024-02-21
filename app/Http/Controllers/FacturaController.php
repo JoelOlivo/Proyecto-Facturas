@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Factura;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FacturaStoreRequest;
+use App\Mail\FacturaMail;
 use App\Models\Cliente;
+use App\Models\DetalleFactura;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FacturaController extends Controller
 {
@@ -76,13 +79,31 @@ class FacturaController extends Controller
             $factura->delete();
             $with = ['status' => 'success', 'color' => 'green', 'message' => 'factura eliminada correctamente'];
         } catch (\Throwable $th) {
-            $with = ['status' => 'success', 'color' => 'green', 'message' => 'factura no eliminada'. $th];
+            $with = ['status' => 'error', 'color' => 'red', 'message' => 'factura no eliminada'. $th];
         }
 
         return redirect()->route('facturas.index')->with($with);
     }
 
     public function completeSend (Request $request, Factura $factura) {
+
+        $correoCliente = $factura->cliente->email;
+        $detalleFactura = DetalleFactura::with('producto')
+                            ->where('id_factura', $factura->id)
+                            ->get();
+
+        try {
+            Mail::to($correoCliente)->queue(new FacturaMail($factura, $detalleFactura));
+            
+            $factura->status = 'complete';
+            $factura->save();
+
+            $with = ['status' => 'success', 'color' => 'green', 'message' => 'Correo envíado exitosamente'];
+        } catch (\Throwable $th) {
+            $with = ['status' => 'error', 'color' => 'red', 'message' => 'Correo no enviado'. $th];
+        }     
+        
+        return redirect()->route('facturas.index')->with($with);
 
     }
 }

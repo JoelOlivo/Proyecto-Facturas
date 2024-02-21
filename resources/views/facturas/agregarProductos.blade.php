@@ -84,75 +84,77 @@
                 </div>
 
 
-                <form class="grid gap-8 grid-cols-1" action="{{ route('detalleFactura.store') }}" method="POST">
-                    <input type="hidden" value="{{ $factura->id }}" name="id_factura">
-                    @csrf
-                    <div class="shadow sm:rounded-md sm:overflow-hidden">
-                        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                @if ($factura->status == 'nuevo')
+                    <form class="grid gap-8 grid-cols-1" action="{{ route('detalleFactura.store') }}" method="POST">
+                        <input type="hidden" value="{{ $factura->id }}" name="id_factura">
+                        @csrf
+                        <div class="shadow sm:rounded-md sm:overflow-hidden">
+                            <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
 
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <label for="productos" class="block text-sm font-medium text-gray-700">
-                                        Productos
-                                    </label>
-                                    <div class="mt-1 flex rounded-md shadow-sm">
-                                        <select name="id_producto" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
-                                            <option value="">Escoge uno</option>
-                                            @foreach ($productos as $producto)
-                                            <option value="{{ $producto->id }}">{{ $producto->nombre }}
-                                                ({{ $producto->precio }}) </option>
-                                            @endforeach
-                                        </select>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <label for="productos" class="block text-sm font-medium text-gray-700">
+                                            Productos
+                                        </label>
+                                        <div class="mt-1 flex rounded-md shadow-sm">
+                                            <select name="id_producto" class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
+                                                <option value="">Escoge uno</option>
+                                                @foreach ($productos as $producto)
+                                                <option value="{{ $producto->id }}">{{ $producto->nombre }}
+                                                    ({{ $producto->precio }}) </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('productos')
+                                        <span class=" text-sm text-red-600" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
                                     </div>
-                                    @error('productos')
-                                    <span class=" text-sm text-red-600" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
+
+                                    <div>
+                                        <label for="cantidad" class="block text-sm font-medium text-gray-700">
+                                            Cantidad
+                                        </label>
+                                        <div class="mt-1 flex rounded-md shadow-sm">
+                                            <input type="number" name="cantidad" id="cantidad" value="{{ old('cantidad') }}"
+                                                class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
+                                        </div>
+                                        @error('cantidad')
+                                        <span class=" text-sm text-red-600" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
+
+
+                                    <div>
+                                        <label for="precio" class="block text-sm font-medium text-gray-700">
+                                            Precio (Mantener en blanco para no modificar)
+                                        </label>
+                                        <div class="mt-1 flex rounded-md shadow-sm">
+                                            <input type="text" name="precio" id="precio" value="{{ old('precio') }}"
+                                                class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
+                                        </div>
+                                        @error('precio')
+                                        <span class=" text-sm text-red-600" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label for="cantidad" class="block text-sm font-medium text-gray-700">
-                                        Cantidad
-                                    </label>
-                                    <div class="mt-1 flex rounded-md shadow-sm">
-                                        <input type="number" name="cantidad" id="cantidad" value="{{ old('cantidad') }}"
-                                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
-                                    </div>
-                                    @error('cantidad')
-                                    <span class=" text-sm text-red-600" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
 
-
-                                <div>
-                                    <label for="precio" class="block text-sm font-medium text-gray-700">
-                                        Precio (Mantener en blanco para no modificar)
-                                    </label>
-                                    <div class="mt-1 flex rounded-md shadow-sm">
-                                        <input type="text" name="precio" id="precio" value="{{ old('precio') }}"
-                                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-md sm:text-sm border-gray-300">
-                                    </div>
-                                    @error('precio')
-                                    <span class=" text-sm text-red-600" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                    @enderror
-                                </div>
                             </div>
-
-
+                            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                                <button type="submit"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Añadir
+                                </button>
+                            </div>
                         </div>
-                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                            <button type="submit"
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Añadir
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                @endif
 
                 <div class="w-full">
                     <div class="bg-white rounded my-2">
@@ -226,18 +228,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" text-right">
+                    @if ($factura->status == 'nuevo')
+                        <div class=" text-right">
+                            <form method="POST" action="{{ route('facturas.complete', ['factura'=> $factura->id]) }}">
+                                @csrf
+                                <a href="{{ route('facturas.complete', ['factura'=> $factura->id]) }}" onclick="event.preventDefault();
+                                                this.closest('form').submit();"
+                                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition mb-4">
+                                    {{ __('Completar y envíar') }}
 
-                        <form method="POST" action="{{ route('facturas.complete', ['factura'=> $factura->id]) }}">
-                            @csrf
-                            <a href="{{ route('facturas.complete', ['factura'=> $factura->id]) }}" onclick="event.preventDefault();
-                                            this.closest('form').submit();"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition mb-4">
-                                {{ __('Completar y envíar') }}
-
-                            </a>
-                        </form>
-                    </div>
+                                </a>
+                            </form>
+                        </div>
+                    @endif
                 </div>
 
             </div>

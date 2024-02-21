@@ -91,9 +91,9 @@
                                                         <a href="{{ route('facturas.agregarProductos', ['factura' => $factura->id]) }}" class="text-gray-500 hover:text-gray-100 mr-2">
                                                             <i class="material-icons-outlined text-base">visibility</i>
                                                         </a>
-                                                        <a href="{{ route('facturas.edit', ['factura' => $factura->id]) }}" class="text-yellow-400 hover:text-gray-100 mx-2">
+                                                        {{-- <a href="{{ route('facturas.edit', ['factura' => $factura->id]) }}" class="text-yellow-400 hover:text-gray-100 mx-2">
                                                         <i class="material-icons-outlined text-base">edit</i>
-                                                        </a>
+                                                        </a> --}}
                                                         <form method="POST" action="{{ route('facturas.destroy', ['factura' => $factura->id]) }}">
                                                             @csrf
                                                             {{method_field("DELETE")}}
