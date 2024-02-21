@@ -11,4 +11,8 @@ class Factura extends Model
 
     public $fillable = ['serie', 'status', 'id_cliente'];
 
+    public function cliente () {
+        
+        return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
 }

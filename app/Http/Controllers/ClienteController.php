@@ -14,7 +14,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $clientes =Cliente::paginate(10);
+        $clientes = Cliente::paginate(10);
         return view('clientes.index', compact('clientes'));
     }
 
@@ -31,10 +31,8 @@ class ClienteController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ClienteStoreRequest $request)
-    {
-        $data = $request->all();
-        
-        Cliente::create($data);
+    {        
+        Cliente::create($request->validated());
         return redirect()->route('clientes.index')->with(['status' => 'success', 'color' => 'green', 'message' => 'Cliente creado correctamente']);
     }
 
@@ -57,11 +55,9 @@ class ClienteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(ClienteStoreRequest $request, Cliente $cliente)
     {
-        $data = $request->all();
-        
-        $cliente->fill($data);
+        $cliente->fill($request->validated());
         $cliente->save();
 
         return redirect()->route('clientes.index')->with(['status' => 'success', 'color' => 'green', 'message' => 'Cliente actualizado con éxito']);

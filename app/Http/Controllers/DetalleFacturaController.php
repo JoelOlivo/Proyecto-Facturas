@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DetalleFactura;
 use App\Http\Controllers\Controller;
+use App\Models\Factura;
+use App\Models\Producto;
 use Illuminate\Http\Request;
 
 class DetalleFacturaController extends Controller
@@ -19,9 +21,12 @@ class DetalleFacturaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Factura $factura)
     {
-        //
+        $productos = Producto::all();
+        $detalles = DetalleFactura::with('producto')->where('id_factura', $factura->id)->get();
+
+        return view('facturas.agregarProductos', compact('productos', 'detalles', 'factura'));
     }
 
     /**
@@ -29,7 +34,23 @@ class DetalleFacturaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'id_producto' => 'required',
+            'id_factura' => 'required',
+            'cantidad' => 'required'
+        ]);
+
+        $data = $request->only(['id_producto','id_factura','cantidad', 'precio']);
+        
+        if ($data['precio'] == "" ) {
+            $data['precio'] = Producto::find($data['id_producto'])->precio;
+        }
+        
+        $data['precio_total'] = $data['precio'] * $data['cantidad'];
+
+        DetalleFactura::create($data);
+
+        return redirect()->route('facturas.agregarProductos', ['factura' => $data['id_factura']])->with(['status' => 'success', 'color' => 'green', 'message' => 'Agregado correctamente']);
     }
 
     /**
